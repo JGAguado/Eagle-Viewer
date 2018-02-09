@@ -175,7 +175,6 @@ class Board():
                     # item_thin = "Part1\PCB\Rib." + str(ii) + "\ThickThin1"
                     # length1 = parameters1.Item(item_thin)
                     # length1.Value = 0.5
-
                     part1.Update
 if __name__ == '__main__':
     path = r'.\Test_Board\Test_board.brd'
