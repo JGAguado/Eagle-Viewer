@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.patches import FancyBboxPatch
 import xmltodict
-import win32com.client
+# import win32com.client
 
 
 class Board():
@@ -35,7 +35,7 @@ class Board():
 
 
     def plot(self):
-        color_layers = [['c', 0.5],['b', 0.2]]
+        color_layers = [['c', 40],['b', 20]]
         lx = float(self.brd['board']['plain']['wire'][1]['@x1'])
         ly = float(self.brd['board']['plain']['wire'][1]['@y2'])
         scale = 1/3
@@ -52,27 +52,35 @@ class Board():
                         points.append([float(wire['@x1']), float(wire['@y1'])])
                         points.append([float(wire['@x2']), float(wire['@y2'])])
 
-                        x1, x2, y1, y2 = float(wire['@x1']), float(wire['@x2']), float(wire['@y1']), float(wire['@y2'])
+                        x1, x2, y1, y2, lw = float(wire['@x1']), float(wire['@x2']), float(wire['@y1']), float(wire['@y2']), color[1]*float(wire['@width'])
 
                         self.axes.set_xlim(0, lx)
                         self.axes.set_ylim(0, ly)
 
-                        self.draw_wire(x1, y1, x2, y2, color[0], color[1])
+                        self.draw_wire(x1, y1, x2, y2, color[0], lw)
                         # axes.plot(x1, y1, marker='.', markersize=color[1], color=color[0], linewidth=color[1])
                     # if color == color_layers[0]:
                     #     self.uni_wire(points)
 
         plt.show()
 
+    # def draw_wire(self, x1, y1, x2, y2, color, linewidth):
+    #
+    #     length = np.sqrt(((x2-x1)**2)+ ((y2-y1)**2))
+    #     degrees = math.degrees(math.atan2(y2-y1, x2-x1))
+    #     fancybox = FancyBboxPatch([x1, y1], linewidth, length, boxstyle=mpatches.BoxStyle("Round"), mutation_scale=0.2,
+    #                               mutation_aspect=1, color=color)
+    #     t = mpl.transforms.Affine2D().rotate_deg(degrees)
+    #     fancybox.set_transform(t)
+    #     self.axes.add_patch(fancybox)
+
     def draw_wire(self, x1, y1, x2, y2, color, linewidth):
 
-        length = np.sqrt(((x2-x1)**2)+ ((y2-y1)**2))
-        degrees = math.degrees(math.atan2(y2-y1, x2-x1))
-        fancybox = FancyBboxPatch([x1, y1], linewidth, length, boxstyle=mpatches.BoxStyle("Round"), mutation_scale=0.2,
-                                  mutation_aspect=1, color=color)
-        t = mpl.transforms.Affine2D().rotate_deg(degrees)
-        fancybox.set_transform(t)
-        self.axes.add_patch(fancybox)
+        x = [x1, x2]
+        y = [y1, y2]
+
+        # fig, ax = plt.subplots()
+        self.axes.plot(x, y, lw=linewidth, solid_capstyle='round', color=color)
 
     def uni_wire(self, points):
         print('------------')
